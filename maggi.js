@@ -5,7 +5,7 @@ var dbUtil=require("./dbutil");
 var db=  new dbUtil();
 var reciepe=new prepareNoodle();
 var queryArr=require('./scripts/jabong').queryArr;
-
+var categoryLinks=require("./categoryLinks");
 
 
 function processIt(q){
@@ -44,6 +44,43 @@ noodle.query(query)
   return insertableArr;
  }
 
- db.initDB().then(function(){
+/* db.initDB().then(function(){
    processIt(queryArr.shift());
- });
+ }); */
+ 
+ var categoryQuery=
+  {
+  url:      'http://www.shopclues.com/categories',
+  type:"bot",
+  map:{
+    category:{
+  selector: '.cat_icon_text_nl',
+  looper:'.cat_icon_text_nl',
+  extractor:[{
+    categoryName:{
+      selector:'div:first a',
+      property:'text'
+    },
+    categoryLink:{
+      selector:'div:first a',
+      property:'href'
+    }
+  },
+  {
+    subCategoryName:{
+      selector:'div a',
+      property:'text'
+    },
+   subCategoryLink:{
+      selector:'div a',
+      property:'href'
+    }
+  }
+  ],
+  extract:  'text'
+    }
+  }
+  }
+  categoryLinks.extractCategoryLinks(categoryQuery).then(function(results){
+   console.log(JSON.stringify(results));
+  })
