@@ -1,8 +1,7 @@
-var noodle = require('./lib/noodle');
 var Q           = require('q');
-var prepareNoodle = require('./prepareNoodle')
-var reciepe=new prepareNoodle();
-var queryArr=[{
+var noodle = require('../lib/noodle');
+
+exports.queryArr=[{
   url:      'http://www.jabong.com/men/clothing/casual-shirts/',
   type:"bot",
   requestHeader:{'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36',
@@ -112,36 +111,3 @@ var queryArr=[{
     }
   }
 }]
-
-var input={};
-
-input.schema={
-  
-  
-}
-
-
-function processIt(q){
-
- if(q)
- var noodleQuery=reciepe.handlePagination(q);
- noodleQuery.then(function(result){
-     console.log(result);
-     processQuery(result[1]);
- })
- 
-//  processQuery(q);
-  
-  
-}
-function processQuery(query){
-noodle.query(query)
-.then(function (results) {
-  console.log(JSON.stringify(results.results));
-}).then(function(){
-  console.log('done')
-  processIt(queryArr.shift())
-});
-}
-
-processIt(queryArr.shift());
