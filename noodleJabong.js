@@ -1,4 +1,4 @@
-var noodle = require('noodlejs');
+var noodle = require('./lib/noodle');
 var Q           = require('q');
 var prepareNoodle = require('./prepareNoodle')
 var reciepe=new prepareNoodle();
