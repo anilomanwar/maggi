@@ -50,31 +50,24 @@ noodle.query(query)
  
  var categoryQuery=
   {
-  url:      'http://www.shopclues.com/categories',
-  type:"bot",
+  url: 'http://www.shopclues.com/categories',
+  type:"pc",
   map:{
     category:{
   selector: '.cat_icon_text_nl',
   looper:'.cat_icon_text_nl',
   extractor:[{
     categoryName:{
-      selector:'div:first a',
-      property:'text'
+      selector:'.nav_topsubmenu_label_new a',
+      properties:['text','href']
     },
-    categoryLink:{
-      selector:'div:first a',
-      property:'href'
+    children:[{
+     subCategoryName:{
+      selector:'div div a',
+      properties:['text','href']
     }
-  },
-  {
-    subCategoryName:{
-      selector:'div a',
-      property:'text'
-    },
-   subCategoryLink:{
-      selector:'div a',
-      property:'href'
     }
+     ]
   }
   ],
   extract:  'text'
