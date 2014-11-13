@@ -5,7 +5,7 @@ var fs=require("fs");
 var files=fs.readdirSync('../out');
 var xml2object = require('xml2object');
 var qlimit = require('../qlimit');
-
+var _=require('underscore')
 var db=  new dbUtil();
 db.initDB().then(function(){
  console.log('init')
@@ -85,13 +85,14 @@ var query={
 
 var process=function(link){
   var deferred=Q.defer()
-  query.url=link
-noodle.query(query).then(function (results) {
+  var queryP=_.extend({},query)
+  queryP.url=link
+noodle.query(queryP).then(function (results) {
   //console.log(JSON.stringify(results));
   var data=results.results[0].results;
   
   var dataArr=[];
-  dataArr.push(dataProcessor(data))
+  dataArr.push(dataProcessor(data,queryP))
    db.insertData(data).then(function(){
    deferred.resolve()
    }).fail(function(){
@@ -101,9 +102,9 @@ noodle.query(query).then(function (results) {
 return deferred.promise;
 }
 
-var dataProcessor=function(data){
+var dataProcessor=function(data,queryP){
   var processedData={}
-  processedData.url=query.url;
+  processedData.url=queryP.url;
   processedData.category=1234;
   processedData.image=data.image[0]
   processedData.price=data.price[0].replace("Rs. ","")
@@ -114,14 +115,34 @@ var dataProcessor=function(data){
   return processedData;
 }
 //process=qlimit.limitConcurrency(process, 2);
-var processLinks = function(links){
-    //links.forEach(function(link){
-        console.log(links[0].url)
-        process(links[0].url).then(process(links[1].url))
-        
-        
-   // })
+var splitArr=function(batchSize,linkArr){
     
+var n = batchSize;
+var lists = _.groupBy(linkArr, function(element, index){
+  return Math.floor(index/n);
+});
+lists = _.toArray(lists);
+    return lists;
+}
+var iteration=function(miniArr){
+    var promise=[]
+     miniArr.forEach(function(link){
+           promise.push(process(link.url))
+       })
+    return promise;
+}
+
+var processLinks = function(links,callback){
+   var spliietdArr= splitArr(10,links)
+   var arr=spliietdArr.shift();
+  function tmp(arr){
+        Q.all(iteration(arr)).then(function(){
+            var ab=spliietdArr.shift();
+            if(ab)
+            tmp(iteration(ab))
+        })
+   }
+   tmp(arr)
 }
 
 getLinks(files.shift());
