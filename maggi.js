@@ -74,6 +74,34 @@ noodle.query(query)
     }
   }
   }
+  
+   var categoryQueryFlipkart=
+  {
+  url: 'http://www.flipkart.com/',
+  type:"pc",
+  map:{
+    category:{
+  selector: '.menu-column',
+  looper:'.menu-column',
+  extractor:[{
+    categoryName:{
+      selector:'.heading a',
+      properties:['text','href']
+    },
+    children:[{
+     subCategoryName:{
+      selector:'.menu-item a',
+      properties:['text','href']
+    }
+    }
+     ]
+  }
+  ],
+  extract:  'text'
+    }
+  }
+  }
+  
   categoryLinks.extractCategoryLinks(categoryQuery).then(function(results){
    console.log(JSON.stringify(results));
   })

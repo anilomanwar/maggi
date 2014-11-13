@@ -23,7 +23,7 @@ var dataToInsert=_insertBulkJson(products);
 var query = connection.query(sql, [dataToInsert], function(err, result) {
   if(err){
    console.log(err)
-   deferred.reject(new Error(err))
+   deferred.resolve(new Error(err))
   }
   else
   {
