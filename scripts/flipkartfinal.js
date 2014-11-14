@@ -1,35 +1,20 @@
-var Q           = require('q');
-var noodle = require('../lib/noodle');
-var dbUtil=require("../dbutil");
+var Q  = require('q');
 var fs=require("fs");
 var files=fs.readdirSync('../out');
+var crawler=require('./crawler')
 var es=require("../estest");
 var xml2object = require('xml2object');
-var qlimit = require('../qlimit');
 var _=require('underscore')
-var crawler=require('./crawler')
-var db=  new dbUtil();
-db.initDB().then(function(){
- console.log('init')
-})
-
-
 
 var getLinks=function(file){
      if(!file)
     return false;
     extractLinks(file).then(function(links){
         console.log(links.length)
-        
-    //   processLinks(links[0],links)
-            //   getLinks(files.shift())
             processLinks(links)
     })
     
 }
-
-
-
 
 var extractLinks=function(filename){
     var deferred=Q.defer()
@@ -90,22 +75,9 @@ var process=function(link){
   var queryP=_.extend({},query)
   queryP.url=link
 crawler.getQuery(link,queryP).then(function (results) {
-  //console.log(JSON.stringify(results));
-  var data=results.results[0].results;
-  
-  var dataArr=[];
-  dataArr.push(dataProcessor(data,queryP))
+  console.log(results)
 deferred.resolve()
-/*es.client.create({index: 'testindex',
-  type: 'mytype',
-body:dataProcessor(data)},function(){
- deferred.resolve()
-})
-   db.insertData(data).then(function(){
-   deferred.resolve()
-   }).fail(function(){
-       deferred.resolve()
-   }); */
+
 }).fail(deferred.resolve()); 
 return deferred.promise;
 }
@@ -143,7 +115,9 @@ var iteration=function(miniArr){
 var processLinks = function(links,callback){
    var spliietdArr= splitArr(10,links)
    var arr=spliietdArr.shift();
+    var iterator=0;
   function tmp(arr){
+      console.log(iterator++)
         Q.all(iteration(arr)).then(function(){
             var ab=spliietdArr.shift();
             if(ab)
@@ -154,3 +128,4 @@ var processLinks = function(links,callback){
 }
 
 getLinks(files.shift());
+
