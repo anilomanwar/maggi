@@ -12,6 +12,7 @@ function getQuery(url,query){
     var deferred=q.defer()
 fetchBody(url,query).then(function(body){
            var opArr= processQuery(body,query)
+        //   console.log(opArr)
             deferred.resolve(opArr)             
     })
 return deferred.promise

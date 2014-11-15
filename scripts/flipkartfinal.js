@@ -11,7 +11,8 @@ var getLinks=function(file){
     return false;
     extractLinks(file).then(function(links){
         console.log(links.length)
-            processLinks(links)
+         //   processLinks(links)
+        fs.writeFile('links.txt',JSON.stringify(links))
     })
     
 }
@@ -113,7 +114,7 @@ var iteration=function(miniArr){
 }
 
 var processLinks = function(links,callback){
-   var spliietdArr= splitArr(10,links)
+ /*  var spliietdArr= splitArr(10000,links)
    var arr=spliietdArr.shift();
     var iterator=0;
   function tmp(arr){
@@ -124,8 +125,29 @@ var processLinks = function(links,callback){
             tmp(iteration(ab))
         })
    }
-   tmp(arr)
+   tmp(arr) */
+   // launcher(links)
+    links.forEach(function(link){
+        console.log(link.url)
+    process(link.url)
+    })
 }
-
+var running = 0;
+var limit = 2;
+function launcher(links) {
+  while(running < limit && links.length > 0) {
+    var item = links.shift();
+    process(item.url, function(result) {
+      console.log(result);
+      running--;
+      if(links.length > 0) {
+        launcher();
+      } else if(running == 0) {
+        console.log('done')
+      }
+    });
+    running++;
+  }
+}
 getLinks(files.shift());
 
