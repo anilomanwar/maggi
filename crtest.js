@@ -34,7 +34,7 @@ var query={
 var c = new Crawler({
     maxConnections : 10,
     userAgent:'request',
-    rateLimits:500,
+    
     // This will be called for each crawled page
     callback : function (error, result, $) {
         // $ is Cheerio by default
@@ -95,6 +95,6 @@ if (property === 'text') {
     return $(ele).attr(property);
   }
 }
-var linksArr=JSON.parse(fs.readFileSync('./scripts/links.txt'))
+var linksArr=JSON.parse(fs.readFileSync('./out/1m7_2014-10-26_1.txt'))
 // Queue just one URL, with default callback
 c.queue(linksArr);
