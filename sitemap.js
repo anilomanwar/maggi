@@ -16,9 +16,9 @@ var Q            = require('q'),
        return deferred.promise;
     }
   //  request('http://www.flipkart.com/sitemap/sitemap_index.xml').pipe(zlib.createGunzip()).pipe(out)
-    getSitemap('http://www.flipkart.com/sitemap/sitemap_index.xml').then(function(body){
+    getSitemap('http://www.snapdeal.com/sitemap/sitemap.xml').then(function(body){
         var deferred = Q.defer();
-        fs.writeFile("sitemapMain.xml", body, function(err) {
+        fs.writeFile("snapdeal-sitemapMain.xml", body, function(err) {
                 if(err) {
                     console.log(err);
                 } else {

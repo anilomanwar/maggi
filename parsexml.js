@@ -1,6 +1,6 @@
 var xml2object = require('xml2object');
 var fs=require('fs');
-var source = fs.createReadStream('./out/1m7_2014-10-26_1.xml');
+var source = fs.createReadStream('./out/2oq_2014-10-26_0.xml');
 
 // Create a new xml parser with an array of xml elements to look for
 var parser = new xml2object([ 'loc' ], source);
@@ -16,7 +16,7 @@ parser.on('object', function(name, obj) {
 parser.on('end', function() {
     console.log('Finished parsing xml!');
     console.log(linkArr.length)
-    fs.writeFile('./out/1m7_2014-10-26_1.txt',JSON.stringify(linkArr))
+    fs.writeFile('./out/2oq_2014-10-26_0.txt',JSON.stringify(linkArr))
 });
 
 // Start parsing the input stream
