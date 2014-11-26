@@ -95,6 +95,6 @@ if (property === 'text') {
     return $(ele).attr(property);
   }
 }
-var linksArr=JSON.parse(fs.readFileSync('./out/1m7_2014-10-26_1.txt'))
+var linksArr=JSON.parse(fs.readFileSync('./out/2oq_2014-10-26_0.txt'))
 // Queue just one URL, with default callback
 c.queue(linksArr);
