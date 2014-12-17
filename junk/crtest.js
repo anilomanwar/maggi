@@ -1,4 +1,4 @@
-var Crawler = require("crawler");
+var Crawler = require("./lib/crawlingImpl");
 var url = require('url');
 var _=require('underscore')
 var es=require("./estest");

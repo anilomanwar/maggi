@@ -7,7 +7,6 @@ var es=require("../estest");
 var xml2object = require('xml2object');
 var qlimit = require('../qlimit');
 var _=require('underscore')
-var crawler=require('./crawler')
 var db=  new dbUtil();
 db.initDB().then(function(){
  console.log('init')
@@ -89,14 +88,14 @@ var process=function(link){
   var deferred=Q.defer()
   var queryP=_.extend({},query)
   queryP.url=link
-crawler.getQuery(link,queryP).then(function (results) {
+noodle.query(queryP).then(function (results) {
   //console.log(JSON.stringify(results));
   var data=results.results[0].results;
   
   var dataArr=[];
   dataArr.push(dataProcessor(data,queryP))
 deferred.resolve()
-/*es.client.create({index: 'testindex',
+/*var es=require("../estest");es.client.create({index: 'testindex',
   type: 'mytype',
 body:dataProcessor(data)},function(){
  deferred.resolve()
