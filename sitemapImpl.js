@@ -4,9 +4,16 @@ var _=require('underscore')
 var es=require("./estest");
 var fs=require('fs')
 var query;
+
+ 
+var ee;
+var qhasDrained=false
 var c = new Crawler({
     maxConnections : 10,
     userAgent:'request',
+    onDrain:function(){
+    qhasDrained=true
+    },
     callback : function (error, result, $) {
         if(error){
             console.log(error)
@@ -19,6 +26,8 @@ var c = new Crawler({
                   type: 'test',
                 body:processedData},function(){
                  console.log('inserted')
+                 if(qhasDrained)
+                 ee.emit('someEvent')
                 })
         }
     }
@@ -63,7 +72,8 @@ if (property === 'text') {
     return $(ele).attr(property);
   }
 }
-exports.startCrawling=function(linksArr,objquery){
+exports.startCrawling=function(linksArr,objquery,objee){
+    ee=objee;
      query=objquery
 c.queue(linksArr);
    
