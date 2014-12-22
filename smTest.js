@@ -12,12 +12,12 @@ var query= require('./scripts/Flipkart_SM_Q')
 var ee = new EventEmitter();
 ee.on("someEvent", function () {
     console.log("event has occured");
+    crawler.killInstance()
     processXml(xmls.shift())
 });
 
 var processXml=function(xmlName){
 xmlParser.parser('./tmp/'+xmlName).then(function(result){
-    console.log(result)
 crawler.startCrawling(result,query,ee);
 });
 }

@@ -8,31 +8,7 @@ var query;
  
 var ee;
 var qhasDrained=false
-var c = new Crawler({
-    maxConnections : 10,
-    userAgent:'request',
-    onDrain:function(){
-    qhasDrained=true
-    },
-    callback : function (error, result, $) {
-        if(error){
-            console.log(error)
-          
-        }
-        else{
-            query.url=result.uri;
-             var processedData= processQuery($,query)
-             es.client.create({index: 'fl-index',
-                  type: 'test',
-                body:processedData},function(){
-                 console.log('inserted')
-                 if(qhasDrained)
-                 ee.emit('someEvent')
-                })
-        }
-    }
-});
-
+var c;
 function processQuery($,query){
     console.log('processing')
     var tmpObj= {};
@@ -74,10 +50,36 @@ if (property === 'text') {
 }
 exports.startCrawling=function(linksArr,objquery,objee){
     ee=objee;
-     query=objquery
-c.queue(linksArr);
+    query=objquery
+c = new Crawler({
+    maxConnections : 10,
+    userAgent:'request',
+    onDrain:function(){
+    qhasDrained=true
+    },
+    callback : function (error, result, $) {
+        if(error){
+            console.log(error)
+          
+        }
+        else{
+            query.url=result.uri;
+             var processedData= processQuery($,query)
+             es.client.create({index: 'fl-index-final-1',
+                  type: 'test',
+                body:processedData},function(){
+                 console.log('inserted')
+                 if(qhasDrained){
+                 ee.emit('someEvent')
+                 qhasDrained=false;
+                 }
+                })
+        }
+    }
+});
+c.queue(linksArr); 
    
 }
 exports.killInstance=function(){
-
+delete c;
 }
