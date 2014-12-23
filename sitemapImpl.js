@@ -4,13 +4,13 @@ var _=require('underscore')
 var es=require("./estest");
 var fs=require('fs')
 var query;
-
+var logger = require("./lib/w-logger");
  
 var ee;
 var qhasDrained=false
 var c;
 function processQuery($,query){
-    console.log('processing')
+    logger.info('Processing to structure the data')
     var tmpObj= {};
     tmpObj.url=query.url
     try{
@@ -55,24 +55,24 @@ c = new Crawler({
     maxConnections : 10,
     userAgent:'request',
     onDrain:function(){
-    qhasDrained=true
+     logger.info('Cque is drained')
+    ee.emit('someEvent')
     },
     callback : function (error, result, $) {
         if(error){
-            console.log(error)
+            logger.fatal("data not crawled"+JSON.stringify(result))
           
         }
         else{
+            logger.info("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
              es.client.create({index: 'fl-index-final-1',
                   type: 'test',
                 body:processedData},function(){
-                 console.log('inserted')
-                 if(qhasDrained){
-                 ee.emit('someEvent')
-                 qhasDrained=false;
-                 }
+                 logger.info("data is inserted in the index")
+                 
+                 
                 })
         }
     }

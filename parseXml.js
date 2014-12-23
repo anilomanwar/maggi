@@ -1,6 +1,6 @@
 var xml2object = require('xml2object');
 var q=require('q')
-
+var logger = require("./lib/w-logger");
 exports.parser=function(fileName){
 var deffered=q.defer()
 var parser = new xml2object([ 'loc' ]);
@@ -14,8 +14,8 @@ parser.on('object', function(name, obj) {
 
 // Bind to the file end event to tell when the file is done being streamed
 parser.on('end', function() {
-    console.log('Finished parsing xml!');
-    console.log(linkArr.length)
+    logger.info('Finished parsing xml!');
+    logger.info("Total number of Links=========="+linkArr.length)
     deffered.resolve(linkArr)
 });
 
