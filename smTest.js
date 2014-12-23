@@ -18,6 +18,7 @@ ee.on("someEvent", function () {
 });
 
 var processXml=function(xmlName){
+logger.info("Parsing xml==========="+xmlName)
 xmlParser.parser('./tmp/'+xmlName).then(function(result){
 logger.info("XML Parsed")
 crawler.startCrawling(result,query,ee);
