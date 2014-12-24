@@ -27,7 +27,8 @@
     "iconv-lite": "0.4.4",
     "jschardet": "1.1.0",
     "lodash": "2.4.1",
-    "winston":"0.8.3"
+    "winston":"0.8.3",
+      "winston-elasticsearch":"0.1.1"
   },
   "devDependencies": {},
   "scripts": {
