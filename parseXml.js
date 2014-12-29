@@ -15,7 +15,7 @@ parser.on('object', function(name, obj) {
 // Bind to the file end event to tell when the file is done being streamed
 parser.on('end', function() {
     logger.info('Finished parsing xml!');
-    logger.info("Total number of Links=========="+linkArr.length)
+    logger.warn("Total number of Links=========="+linkArr.length)
     deffered.resolve(linkArr)
 });
 

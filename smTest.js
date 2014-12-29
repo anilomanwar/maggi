@@ -10,18 +10,21 @@ var EventEmitter = require("events").EventEmitter;
 var crawler=require('./sitemapImpl')
 var query= require('./scripts/Flipkart_SM_Q')
     
-var ee = new EventEmitter();
+/* var ee = new EventEmitter();
 ee.on("someEvent", function () {
     logger.info("First File processing completed")
     crawler.killInstance()
     processXml(xmls.shift())
-});
+}); */
 
 var processXml=function(xmlName){
-logger.info("Parsing xml==========="+xmlName)
+logger.warn("Parsing xml==========="+xmlName)
 xmlParser.parser('./tmp/'+xmlName).then(function(result){
 logger.info("XML Parsed")
-crawler.startCrawling(result,query,ee);
+crawler.startCrawling(result,query,xmlName).then(function(){
+crawler.killInstance()
+    processXml(xmls.shift())
+});
     logger.info("Crawling Started")
 });
 }
