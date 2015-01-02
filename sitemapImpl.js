@@ -56,12 +56,12 @@ c = new Crawler({
     maxConnections : 10,
     userAgent:'request',
     onDrain:function(){
-     logger.warn('Cque is drained')
+    logger.warn('Cque is drained')
     deferred.resolve()
     },
     callback : function (error, result, $) {
         if(error){
-            logger.fatal("data not crawled"+JSON.stringify(result))
+            logger.error("data not crawled"+JSON.stringify(result))
           
         }
         else{
@@ -78,7 +78,12 @@ c = new Crawler({
         }
     }
 });
+try{
 c.queue(linksArr); 
+}
+    catch(e){
+        logger.error('querue error'+e)
+        }
   return deferred.promise; 
 }
 exports.killInstance=function(){
