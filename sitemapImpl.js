@@ -68,9 +68,15 @@ c = new Crawler({
             logger.info("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
-             es.client.create({index: 'fl-index-'+xmlName,
+             es.client.create({index: "fl-index-"+xmlName,
                   type: 'test',
-                body:processedData},function(){
+                body:processedData},function(err, response, status){
+                 if(err)
+                 {
+                 logger.error('ES error'+ err)
+                 throw new Error('herroe')
+                 }
+                 else
                  logger.info("data is inserted in the index")
                  
                  
@@ -85,6 +91,73 @@ c.queue(linksArr);
         logger.error('querue error'+e)
         }
   return deferred.promise; 
+}
+
+function getLastExistingUrl(fileName){
+    var deferred=q.defer();
+es.client.search({
+"index":'fl-index-'+fileName,
+"body":{"query":{"match_all":{}},"size":1,"fields":["url"],"sort":[{"_timestamp":{"order":"desc"}}]}
+},function(err, response, status){
+deferred.resolve(response.hits.hits[0].fields.url[0])
+}
+)
+return deferred.promise;
+}
+
+exports.checkExistingData=function(fileName,linkArr){
+ var deferred=q.defer();
+es.client.count({
+"index":'fl-index-'+fileName
+},function(err, response, status){
+    if(!response.count){
+        deferred.resolve(
+            {dataExists:false}
+        )
+    }
+else if(linkArr.length==response.count){
+deferred.resolve(
+    {dataExists:true, doNotProcess:true}
+)
+}
+    else {
+        getLastExistingUrl(fileName).then(function(url){
+            console.log(linkArr.indexOf(url))
+            var index=linkArr.indexOf(url)
+            var reducedArr=linkArr.splice(index,linkArr.length-index )
+            deferred.resolve(
+            {dataExists:true, reducedArr:reducedArr}
+            )
+        })
+    }
+}
+)
+return deferred.promise;
+}
+exports.createIndex=function(fileNmae){
+    var deferred=q.defer();
+es.client.indices.create({
+"index":"fl-index-"+fileNmae,
+"body":{
+    "settings" : {
+        "number_of_shards" : 5,
+        "number_of_replicas" : 0
+    },
+    "mappings" : {
+        "test" : {
+            "_source" : { "enabled" : true },
+            "_timestamp": { "enabled" : true },
+            "properties" : {
+                "field1" : { "type" : "string", "index" : "not_analyzed" }
+            }
+        }
+    }
+}},function(err, response, status){
+
+deferred.resolve()
+}
+)
+return deferred.promise; 
 }
 exports.killInstance=function(){
 delete c;
