@@ -41,12 +41,15 @@
         }
         
         else {
-        logger.warn('reduced')
+            //tmp change
+      /*  logger.warn('reduced')
         console.log(data.reducedArr.length)
         crawler.startCrawling(data.reducedArr,query,xmlName).then(function(){
         crawler.killInstance()
         processXml(xmls.shift())
-    });
+    }); */
+            logger.warn('skipping')
+        processXml(xmls.shift())
         }
     });
         })
