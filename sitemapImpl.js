@@ -53,7 +53,7 @@ exports.startCrawling=function(linksArr,objquery,xmlName){
    var deferred=q.defer();
     query=objquery
 c = new Crawler({
-    maxConnections : 10,
+    maxConnections : 5,
     userAgent:'request',
     onDrain:function(){
     logger.warn('Cque is drained')
@@ -108,7 +108,6 @@ function indexer(data){
                  }
                  else
                  logger.info("data is inserted in the index")
-                 
                  
                 })
     

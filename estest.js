@@ -1,6 +1,7 @@
 var elasticsearch = require('elasticsearch');
 exports.client = new elasticsearch.Client({
   host: 'localhost:9200',
+    minSockets:5,
   log: [{
   type: 'stdio',
   levels: ['error', 'warning']
