@@ -68,19 +68,8 @@ c = new Crawler({
             logger.info("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
-             es.client.create({index: "fl-index-"+xmlName,
-                  type: 'test',
-                body:processedData},function(err, response, status){
-                 if(err)
-                 {
-                 logger.error('ES error'+ err)
-                 throw new Error('herroe')
-                 }
-                 else
-                 logger.info("data is inserted in the index")
-                 
-                 
-                })
+             var indexMetaData= { index:  { _index: "fl-index-"+xmlName, _type: 'test' } }
+             indexer({"indexMetaData":indexMetaData,"processedData":processedData})
         }
     }
 });
@@ -103,6 +92,28 @@ deferred.resolve(response.hits.hits[0].fields.url[0])
 }
 )
 return deferred.promise;
+}
+var bklArr=[];
+function indexer(data){
+    bklArr.push(data.indexMetaData)
+    bklArr.push(data.processedData)
+    if(bklArr.length >= 200){
+       
+    es.client.bulk({
+                body:bklArr},function(err, response, status){
+                 if(err)
+                 {
+                 logger.error('ES error'+ err)
+                 throw new Error('herroe')
+                 }
+                 else
+                 logger.info("data is inserted in the index")
+                 
+                 
+                })
+    
+    bklArr=[]
+    }
 }
 
 exports.checkExistingData=function(fileName,linkArr){
