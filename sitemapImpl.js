@@ -55,6 +55,7 @@ exports.startCrawling=function(linksArr,objquery,xmlName){
 c = new Crawler({
     maxConnections : 5,
     userAgent:'request',
+    debug:true,
     onDrain:function(){
     logger.warn('Cque is drained')
     deferred.resolve()
