@@ -22,10 +22,10 @@ parser.on('object', function(name, obj) {
 parser.on('end', function() {
     console.log('Finished parsing xml!');
     console.log(linkArr.length)
-    fs.writeFile('./out/flipkart_gzlinks.txt',JSON.stringify(linkArr))
+    fs.writeFile('./out/jewelsouk_links.txt',JSON.stringify(linkArr))
 });
 
 
 
 
-getLinks('http://www.flipkart.com/sitemap/sitemap_index.xml')
+getLinks('http://www.jewelsouk.com/sitemap.xml')

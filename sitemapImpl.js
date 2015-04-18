@@ -69,7 +69,8 @@ c = new Crawler({
             logger.info("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
-             var indexMetaData= { index:  { _index: "fl-index-"+xmlName, _type: 'test' } }
+			 console.log(processedData)
+            var indexMetaData= { index:  { _index: "jewelsouk", _type: 'test' } }
              indexer({"indexMetaData":indexMetaData,"processedData":processedData})
         }
     }
