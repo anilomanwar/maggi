@@ -2,7 +2,7 @@
     var xmlParser=require('./parseXml')
     var xmls=fs.readdirSync('./tmp')
     var logger = require("./lib/w-logger");
-    var linksArr=JSON.parse(fs.readFileSync('./out/cartlane_links.txt'))
+    var linksArr=JSON.parse(fs.readFileSync('./out/caratlane_links.txt'))
 
     var EventEmitter = require("events").EventEmitter;
 

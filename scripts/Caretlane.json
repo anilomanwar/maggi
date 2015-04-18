@@ -13,6 +13,10 @@
         "image":{
           "selector":".MagicToolboxMainContainer img",
           "extract":"src"
-        }
+        },
+		"category":{
+			"selector":".breadcrumbs a",
+			"extract":"text"
+		}
     }
 }
