@@ -2,13 +2,13 @@
     var xmlParser=require('./parseXml')
     var xmls=fs.readdirSync('./tmp')
     var logger = require("./lib/w-logger");
-    var linksArr=JSON.parse(fs.readFileSync('./out/jewelsouk_links_filtered.txt'))
+    var linksArr=JSON.parse(fs.readFileSync('./out/cartlane_links.txt'))
 
     var EventEmitter = require("events").EventEmitter;
 
 
     var crawler=require('./sitemapImpl')
-    var query= require('./scripts/Jewelsouk.json')
+    var query= require('./scripts/Caretlane.json')
 
     
     /* var ee = new EventEmitter();
