@@ -1,8 +1,8 @@
 var noodle = require('./lib/noodle');
 var Q           = require('q');
 var prepareNoodle = require('./prepareNoodle');
-var dbUtil=require("./dbutil");
-var db=  new dbUtil();
+//var dbUtil=require("./dbutil");
+//var db=  new dbUtil();
 var reciepe=new prepareNoodle();
 var queryArr=require('./scripts/jabong').queryArr;
 var categoryLinks=require("./categoryLinks");
@@ -102,6 +102,26 @@ noodle.query(query)
   }
   }
   
-  categoryLinks.extractCategoryLinks(categoryQuery).then(function(results){
+    var categoryQueryJewelsuok=
+  {
+  url: 'http://www.jewelsouk.com/',
+  type:"pc",
+  map:{
+    category:{
+  selector: '.dropdown-menu a[rel="childm"]',
+  looper:'.dropdown-menu a[rel="childm"]',
+  extractor:[{
+    categoryName:{
+      selector:'a[rel="childm"]',
+      properties:['text','href']
+    }
+  }
+  ],
+  extract:  'text'
+    }
+  }
+  }
+  
+  categoryLinks.extractCategoryLinks(categoryQueryJewelsuok).then(function(results){
    console.log(JSON.stringify(results));
   })

@@ -53,8 +53,8 @@ exports.startCrawling=function(linksArr,objquery,xmlName){
    var deferred=q.defer();
     query=objquery
 c = new Crawler({
-    maxConnections : 5,
-    userAgent:'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36',
+    maxConnections : 1,
+    userAgent:'Mozilla/5.0 GurujiBot/1.0 (+http://www.guruji.com/en/WebmasterFAQ.html)',
     debug:true,
     onDrain:function(){
     logger.warn('Cque is drained')
