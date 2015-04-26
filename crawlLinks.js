@@ -2,13 +2,13 @@
     var xmlParser=require('./parseXml')
     var xmls=fs.readdirSync('./tmp')
     var logger = require("./lib/w-logger");
-    var linksArr=JSON.parse(fs.readFileSync('./out/fabfurnish_links1.txt'))
+    var linksArr=JSON.parse(fs.readFileSync('./out/pepperfry_links1.txt'))
 
     var EventEmitter = require("events").EventEmitter;
 
 
     var crawler=require('./sitemapImpl')
-    var query= require('./scripts/fabfurnish_1.json')
+    var query= require('./scripts/pepperfry.json')
 
     
     /* var ee = new EventEmitter();
