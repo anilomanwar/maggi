@@ -54,7 +54,7 @@ exports.startCrawling=function(linksArr,objquery,xmlName){
     query=objquery
 c = new Crawler({
     maxConnections : 5,
-    userAgent:'request',
+    userAgent:'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36',
     debug:true,
     onDrain:function(){
     logger.warn('Cque is drained')
@@ -69,7 +69,7 @@ c = new Crawler({
             logger.info("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
-			 console.log(result.statusCode)
+			 console.log(processedData)
             var indexMetaData= { index:  { _index: "pepperfry", _type: 'test' } }
              indexer({"indexMetaData":indexMetaData,"processedData":processedData})
         }
