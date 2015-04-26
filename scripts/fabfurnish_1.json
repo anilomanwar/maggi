@@ -14,13 +14,13 @@
             "selector": "#price_box",
             "extract": "text"
         },
-        "pricex": {
-            "selector": "#SoldOut,
+        "soldOutStatus": {
+            "selector": "#SoldOut",
             "extract": "style"
         },
         "image":{
-          "selector":".ad-image img",
-          "extract":"src"
+          "selector":"#imgThumb_1 a",
+          "extract":"href"
         },
 		"category":{
 			"selector":".breadcrumbWideDesign li",
