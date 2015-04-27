@@ -71,7 +71,7 @@ c = new Crawler({
             query.url=result.uri;
              var processedData= processQuery($,query)
 			 console.log(processedData)
-            var indexMetaData= { index:  { _index: "pepperfry", _type: 'test' } }
+            var indexMetaData= { index:  { _index: "pepperfry_tor", _type: 'test' } }
              indexer({"indexMetaData":indexMetaData,"processedData":processedData})
         }
     }
