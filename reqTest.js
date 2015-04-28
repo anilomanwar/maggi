@@ -1,9 +1,13 @@
-var request = require('request');
-var r = request.get('http://www.pepperfry.com/mark-home-aqua-color-cotton-2-single-bed-sheets-n-2-pillow-covers-1197983.html', function (err, res, body) {
-  console.log(r.uri.href);
-  console.log(res.request.uri.href);
+var Agent = require('socks5-http-client/lib/Agent');
+var request = require('request')
+var fs = require('fs')
+request({
+    url: 'http://www.pepperfry.com/mark-home-aqua-color-cotton-2-single-bed-sheets-n-2-pillow-covers-1197983.html',
+    proxy:'http://14.139.172.170:3128'
+}, function(err, res) {
+  // console.log(res);
+ //  console.log(err);
+ // console.log(res.request.uri.href);
+fs.writeFile('outpt.txt',res.body)
 
-  // Mikael doesn't mention getting the uri using 'this' so maybe it's best to avoid it
-  // please add a comment if you know why this might be bad
-  console.log(this.uri.href);
 });
