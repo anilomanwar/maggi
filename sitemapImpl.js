@@ -71,7 +71,7 @@ c = new Crawler({
             logger.info("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
-			 console.log(processedData)
+			// console.log(processedData)
             var indexMetaData= { index:  { _index: "pepperfry_proxy", _type: 'test' } }
              indexer({"indexMetaData":indexMetaData,"processedData":processedData})
         }
