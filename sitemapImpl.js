@@ -54,7 +54,9 @@ exports.startCrawling=function(linksArr,objquery,xmlName){
     query=objquery
 c = new Crawler({
     maxConnections : 5,
-    userAgent:'request',
+	//rateLimits :5000,
+    userAgent:'Googlebot/2.1 (+http://www.googlebot.com/bot.html)',
+	proxies:['http://14.139.172.170:3128'],
     debug:true,
     onDrain:function(){
     logger.warn('Cque is drained')
@@ -69,8 +71,8 @@ c = new Crawler({
             logger.info("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
-			 console.log(result.statusCode)
-            var indexMetaData= { index:  { _index: "pepperfry", _type: 'test' } }
+			// console.log(processedData)
+            var indexMetaData= { index:  { _index: "pepperfry_proxy", _type: 'test' } }
              indexer({"indexMetaData":indexMetaData,"processedData":processedData})
         }
     }
