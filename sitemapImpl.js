@@ -56,7 +56,7 @@ c = new Crawler({
     maxConnections : 5,
 	//rateLimits :5000,
     userAgent:'Googlebot/2.1 (+http://www.googlebot.com/bot.html)',
-	proxies:['http://14.139.172.170:3128'],
+	//proxies:['http://14.139.172.170:3128'],
     debug:true,
     onDrain:function(){
     logger.warn('Cque is drained')

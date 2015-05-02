@@ -31,5 +31,8 @@
      "type":"xml"
      
  },
- "indexName":"fabfurnish"
+ "indexName":"fabfurnish",
+ "crawler_opts"::{
+ "proxies":""
+ }
 }

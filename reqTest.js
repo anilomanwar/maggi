@@ -3,7 +3,7 @@ var request = require('request')
 var fs = require('fs')
 request({
     url: 'http://www.pepperfry.com/mark-home-aqua-color-cotton-2-single-bed-sheets-n-2-pillow-covers-1197983.html',
-    proxy:'http://14.139.172.170:3128'
+    proxy:'http://52.74.116.189:3128'
 }, function(err, res) {
   // console.log(res);
  //  console.log(err);
