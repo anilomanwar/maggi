@@ -41,11 +41,11 @@
      "type":"xml"
      
  },
- "indexName":"pepperfry1",
+ "indexName":"pepperfry_1",
  "siteName":"pepperfry",
  "ESServer":"http://52.74.116.189:9200/",
  "DBServer":"198.12.73.13",
- "productsTable":"products6",
+ "productsTable":"products4",
  "EsDbBatchSize":500
  
 }
