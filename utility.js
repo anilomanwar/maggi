@@ -3,7 +3,7 @@ var fs=require('fs')
 var q=require('q')
 var xml2object = require('xml2object');
 
-var parser = new xml2object([ 'sitemap' ]);
+var parser = new xml2object([ 'sitemap','url' ]);
 exports.getLinks=function getLinks(sitemapURL,depth){
     var deferred= q.defer();
 request({url:sitemapURL, headers:{'User-Agent':'request'}}).pipe(parser.saxStream)

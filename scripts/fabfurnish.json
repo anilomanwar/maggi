@@ -29,7 +29,8 @@
         "siteMapUrl": "http://www.fabfurnish.com/sitemap/sitemap.xml",
         "levels": 2,
         "type": "xml",
-		"model":"fabfurnishSitemap"
+		"model":"fabfurnish",
+		"level":1
     },
     "indexName": "fabfurnish",
     "crawler_opts": {
