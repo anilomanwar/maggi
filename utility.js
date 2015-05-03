@@ -3,16 +3,17 @@ var fs=require('fs')
 var q=require('q')
 var xml2object = require('xml2object');
 
-var parser = new xml2object([ 'loc' ]);
-exports.getLinks=function getLinks(sitemapURL){
+var parser = new xml2object([ 'sitemap' ]);
+exports.getLinks=function getLinks(sitemapURL,depth){
     var deferred= q.defer();
 request({url:sitemapURL, headers:{'User-Agent':'request'}}).pipe(parser.saxStream)
 
 var linkArr=[]
 // Bind to the object event to work with the objects found in the XML file
 parser.on('object', function(name, obj) {
-    linkArr.push(obj['$t'])
-   // console.log(obj);
+	obj.depth=depth
+    linkArr.push(obj)
+    console.log(obj);
 });
 
 // Bind to the file end event to tell when the file is done being streamed

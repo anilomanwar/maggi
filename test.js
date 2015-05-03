@@ -1,5 +1,6 @@
 var mongoutil=require("./mongoUtil");
-
+var util=require("./utility");
+/*
 var objmongoutil = new mongoutil('localhost','sos','fabsitemap');
 //objmongoutil.insertSiteMapUrls();
 function updateDemo(){
@@ -16,7 +17,8 @@ objmongoutil.updateProcessingStatus(idArr)
 })
 }
 updateDemo()
-
+*/
+util.getLinks('http://www.fabfurnish.com/sitemap/sitemap.xml')
 
 /*
 es.client.search({

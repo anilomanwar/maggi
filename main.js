@@ -1,15 +1,19 @@
 var utili=require('./utility')
 var esUtil=require('./esUtil')
+var mongoutil=require("./mongoUtil");
 
-var cawlConfig=require('.scripts/fabfurnish')
 
 
-utili.getLinks(cawlConfig.sitemap.siteMapUrl).then(function(linkArr){
-    if(cawlConfig.sitemap.level==1)
-    esUtil.insertSiteMap(linkArr,cawlConfig)
+var cawlConfig=require('./scripts/fabfurnish.json')
+
+
+utili.getLinks(cawlConfig.sitemap.siteMapUrl,cawlConfig.sitemap.level).then(function(linkArr){
+var objmongoutil = new mongoutil('localhost','sos',cawlConfig.sitemap.model);
+    //if(cawlConfig.sitemap.level==1)
+    objmongoutil.insertSiteMapUrls(linkArr)
        
-     else if(cawlConfig.sitemap.level==2) 
-     processLevel2(linkArr.shift())
+    // else if(cawlConfig.sitemap.level==2) 
+    // processLevel2(linkArr.shift())
     
     
 })

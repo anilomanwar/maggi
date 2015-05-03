@@ -8,23 +8,17 @@ var mongoUtil = function(hostname,dbName, modelName){
 	mongoose.connect('mongodb://'+hostname+'/'+dbName);
 	
 	mongo.sitemapSchema=mongoose.Schema({
-    url: String,
+    loc: String,
+	lastmod : Date,
+	depth : Number,
 	created_at: { type: Date, default: Date.now },
 	prosess_status :{type:Number, default:0}
 })
 	mongo.sitemapSchema.plugin(mongoosePaginate)
 	mongo.objModel=mongoose.model(modelName,mongo.sitemapSchema)
 }
-mongoUtil.prototype.insertSiteMapUrls=function(){
+mongoUtil.prototype.insertSiteMapUrls=function(objArr){
 var mongo = this;
-var linksArr=JSON.parse(fs.readFileSync('./out/pepperfry_links1.txt'))
-var objArr=[];
-linksArr.forEach(function(link){
-var tmp={}
-tmp.url=link
-objArr.push(tmp)
-})
-
 mongo.objModel.create(objArr, onInsert);
 
 function onInsert(err, docs) {
