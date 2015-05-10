@@ -49,8 +49,9 @@ if (property === 'text') {
     return $(ele).attr(property);
   }
 }
-exports.startCrawling=function(linksArr,objquery,xmlName){
+exports.startCrawling=function startCrawling(linksArr,objquery,xmlName){
    var deferred=q.defer();
+   var dataArr=[];
     query=objquery
 c = new Crawler({
     maxConnections : 5,
@@ -60,7 +61,7 @@ c = new Crawler({
     debug:true,
     onDrain:function(){
     logger.warn('Cque is drained')
-    deferred.resolve()
+    deferred.resolve(dataArr)
     },
     callback : function (error, result, $) {
         if(error){
@@ -69,11 +70,13 @@ c = new Crawler({
         }
         else{
             logger.info("Data crawled for uri"+result.uri)
+			console.log("Data crawled for uri"+result.uri)
             query.url=result.uri;
              var processedData= processQuery($,query)
-			// console.log(processedData)
-            var indexMetaData= { index:  { _index: "pepperfry_proxy", _type: 'test' } }
-             indexer({"indexMetaData":indexMetaData,"processedData":processedData})
+			 console.log(processedData)
+			 dataArr.push(processedData)
+       //     var indexMetaData= { index:  { _index: "pepperfry_proxy", _type: 'test' } }
+        //     indexer({"indexMetaData":indexMetaData,"processedData":processedData})
         }
     }
 });

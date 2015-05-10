@@ -1,21 +1,50 @@
 var mongoutil=require("./mongoUtil");
 var cawlConfig=require('./scripts/fabfurnish.json')
-var siteMapImpl=require('./sitemapImpl')
+var objsiteMapImpl=require('./sitemapImpl')
 var q=require('q')
 var crawler = function(modelName){
 	var crawlobj=this;
 	crawlobj.batchSize=100;
-	crawlobj.objmongoUtil=new mongoutil('localhost','sos',modelName);
+	crawlobj.objmongoUtil=new mongoutil('localhost','sos',modelName,cawlConfig.mongoose_schema);
 }
-
+var async = require('async')
 crawler.prototype.getLinks=function(){
 	var crawlobj=this;
 	var deferred=q.defer();
 	crawlobj.objmongoUtil.documentCount().then(function(count){
 	var promiseArr=[];
 	console.log(count)
-		for(var i=0;i<= count/100;i++){
-			promiseArr.push(crawlobj.objmongoUtil.findAll(i,100))
+	var pages = Array.apply(null, {length: count/100}).map(Number.call, Number)
+	console.log(pages)
+	
+	async.eachSeries(pages,function(pageno,callback){
+		console.log('loop count ++++++++++++++++++++++++++++++' + pageno)
+			crawlobj.objmongoUtil.findAll(pageno+1,100).then(function(res){
+			var linkArr=[];
+			var idArr=[]
+			res.forEach(function(obj){
+				linkArr.push(obj.loc);
+				idArr.push(obj['_id'])
+			})
+				crawlobj.objmongoUtil.updateProcessingStatus(idArr)
+				crawlobj.start(linkArr).then(function(){
+				
+					callback()
+				})
+				
+			})
+	},
+	function(){
+		console.log('doen')
+	}
+	)
+	
+	/*	for(var i=0;i<= count/100;i++){
+		console.log('loop count ++++++++++++++++++++++++++++++' + i)
+			crawlobj.objmongoUtil.findAll(i,100).then(function(res){
+			console.log(res.loc)
+				objcrawler.start(res)
+			})
 		}
 		console.log("promice co"+promiseArr.length)
 		q.all(promiseArr).then(function (results) {	
@@ -30,19 +59,25 @@ crawler.prototype.getLinks=function(){
 		}).fail(function(){
 		console.log('fail')
 		})
-		console.log('done')
+		console.log('done') */
 	}
 )
 return deferred.promise;
 }
 crawler.prototype.start=function(linkArr){
-	siteMapImpl.startCrawling(linksArr,query).then(function(){
-  
+	var deffered=q.defer();
+	var crawlobj=this;
+	var query=cawlConfig.crawlerMap
+	objsiteMapImpl.startCrawling(linkArr,query,'abc').then(function(dataArr){
+	crawlobj.objmongoUtil.insertData(dataArr);
+	deffered.resolve()
+		console.log('done')
     });
-	
+	return deffered.promise;
 }
 
-var objcrawler = new crawler('sitemaps')
+
+var objcrawler = new crawler('fabfurnish')
 objcrawler.getLinks();
 
 //crawler.startCrawling(linksArr,query).then(function(){
