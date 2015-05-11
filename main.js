@@ -21,10 +21,10 @@ function start(sitemap){
 					utili.getLinks(link.loc,2).
 					then(function(links){
 					console.log(links.length," records found");				
-						objmongoutil.insertActualUrls(links).
-						then(function(l){						
+						objmongoutil.insertActualUrls(links)
+											
 							callback();
-						});				
+								
 					});				 
 				},
 				function(){				
