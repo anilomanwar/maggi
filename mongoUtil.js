@@ -9,7 +9,7 @@ var mongoUtil = function(hostname,dbName, modelName, schema){
 	mongoose.connect('mongodb://'+hostname+'/'+dbName);
 	
 	mongo.sitemapSchema=mongoose.Schema({
-    loc: String,
+    loc: {type:String,unique:true},
 	lastmod : Date,
 	depth : Number,
 	created_at: { type: Date, default: Date.now },
@@ -62,6 +62,7 @@ mongo.objUrlModel.create(objArr, onInsert);
 function onInsert(err, docs) {
     if (err) {
         // TODO: handle error
+		deferred.reject();
     } else {
 	deferred.resolve()
         console.info('%d potatoes were successfully stored.', docs.length);
@@ -78,6 +79,7 @@ mongo.objDataModel.create(data, onInsert);
 function onInsert(err, docs) {
     if (err) {
         // TODO: handle error
+		deferred.reject();
     } else {
 	deferred.resolve()
         console.info('%d potatoes were successfully stored.', docs.length);

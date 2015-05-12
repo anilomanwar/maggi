@@ -22,9 +22,11 @@ function start(sitemap){
 					then(function(links){
 					console.log(links.length," records found");				
 						objmongoutil.insertActualUrls(links)
-											
-							callback();
-								
+						.then(function(){
+						callback();
+						}).fail(function(){
+						callback();
+						})		
 					});				 
 				},
 				function(){				

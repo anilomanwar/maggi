@@ -12,8 +12,7 @@ var linkArr=[]
 // Bind to the object event to work with the objects found in the XML file
 parser.on('object', function(name, obj) {
 	obj.depth=depth
-    linkArr.push(obj)
-    console.log(obj);
+    linkArr.push(obj);
 });
 
 // Bind to the file end event to tell when the file is done being streamed
