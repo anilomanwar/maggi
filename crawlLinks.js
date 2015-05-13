@@ -24,13 +24,13 @@ crawler.prototype.getLinks=function(){
 			var idArr=[]
 			res.forEach(function(obj){
 				linkArr.push(obj.loc);
-				idArr.push(obj['_id'])
+				idArr.push(obj.id)
 			})
 				crawlobj.objmongoUtil.updateProcessingStatus(idArr)
 				crawlobj.start(linkArr).then(function(){
 				
 					callback()
-				})
+				}).fail(callback())
 				
 			})
 	},
