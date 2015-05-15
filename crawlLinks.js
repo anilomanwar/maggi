@@ -27,10 +27,10 @@ crawler.prototype.getLinks=function(){
 				idArr.push(obj.id)
 			})
 				crawlobj.objmongoUtil.updateProcessingStatus(idArr)
-				crawlobj.start(linkArr).then(function(){
+					crawlobj.start(linkArr).then(function(){
 				
 					callback()
-				}).fail(callback())
+				})
 				
 			})
 	},
@@ -72,7 +72,7 @@ crawler.prototype.start=function(linkArr){
 	crawlobj.objmongoUtil.insertData(dataArr);
 	deffered.resolve()
 		console.log('done')
-    });
+    })
 	return deffered.promise;
 }
 
