@@ -62,7 +62,7 @@ mongo.objUrlModel.create(objArr, onInsert);
 function onInsert(err, docs) {
     if (err) {
         // TODO: handle error
-		deferred.reject();
+		deferred.resolve()
     } else {
 	deferred.resolve()
         console.info('%d potatoes were successfully stored.', docs.length);
@@ -79,7 +79,7 @@ mongo.objDataModel.create(data, onInsert);
 function onInsert(err, docs) {
     if (err) {
         // TODO: handle error
-		deferred.reject();
+		deferred.resolve()
     } else {
 	deferred.resolve()
         console.info('%d potatoes were successfully stored.', docs.length);
@@ -118,13 +118,16 @@ mongoUtil.prototype.documentCount=function(callback){
 	return deferred.promise
 }
 
-mongoUtil.prototype.updateProcessingStatus = function (idArr){
+mongoUtil.prototype.updateProcessingStatus = function updateProcessingStatus(idArr){
+var deferred=q.defer();
 var mongo=this;
 var bulk = mongo.objUrlModel.collection.initializeOrderedBulkOp();
     bulk.find({'_id': {$in: idArr}}).update({$set: {process_status: 2}});
     bulk.execute(function (error) {
-		if(!error)
-         console.log('updated')                   
+	deferred.resolve('updated')
+		//if(!error)
+       //  console.log('updated')                   
     });
+	return deferred.promise
 }
  module.exports=mongoUtil;
