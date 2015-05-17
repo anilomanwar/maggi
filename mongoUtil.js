@@ -16,7 +16,7 @@ var mongoUtil = function(hostname,dbName, modelName, schema){
 	process_status :{type:Number, default:0}
 })
 	mongo.urlSchema=mongoose.Schema({
-    loc: {type:String},
+    loc: {type:String,unique:true},
 	lastmod : Date,
 	depth : Number,
 	created_at: { type: Date, default: Date.now },
