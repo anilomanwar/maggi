@@ -75,11 +75,17 @@ crawler.prototype.start=function(linkArr){
     })
 	return deffered.promise;
 }
-
+crawler.prototype.test=function(){
+var crawlobj=this;
+//crawlobj.objmongoUtil.updateProcessingStatus(["55571e967cd35d0d23230ef5"]).then(function(){
+ //   console.log('done')
+//});
+    crawlobj.objmongoUtil.updateStatusOfAll(0)
+}
 
 var objcrawler = new crawler('fabfurnish')
 objcrawler.getLinks();
-
+//objcrawler.test()
 //crawler.startCrawling(linksArr,query).then(function(){
   
  //   });

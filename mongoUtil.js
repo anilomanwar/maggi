@@ -16,7 +16,7 @@ var mongoUtil = function(hostname,dbName, modelName, schema){
 	process_status :{type:Number, default:0}
 })
 	mongo.urlSchema=mongoose.Schema({
-    loc: {type:String,unique:true},
+    loc: {type:String},
 	lastmod : Date,
 	depth : Number,
 	created_at: { type: Date, default: Date.now },
@@ -121,13 +121,25 @@ mongoUtil.prototype.documentCount=function(callback){
 mongoUtil.prototype.updateProcessingStatus = function updateProcessingStatus(idArr){
 var deferred=q.defer();
 var mongo=this;
-var bulk = mongo.objUrlModel.collection.initializeOrderedBulkOp();
-    bulk.find({'_id': {$in: idArr}}).update({$set: {process_status: 2}});
-    bulk.execute(function (error) {
+//var bulk = mongo.objUrlModel.collection.initializeOrderedBulkOp();
+//    bulk.find({'_id': {$in: idArr}}).update({$set: {process_status: 2}});
+//    bulk.execute(function (error) {
+    mongo.objUrlModel.update({'_id': {$in: idArr}},{$set: {process_status: 2}},{multi:true},function(){
+        
 	deferred.resolve('updated')
+})
 		//if(!error)
        //  console.log('updated')                   
-    });
+  //  });
 	return deferred.promise
 }
+
+mongoUtil.prototype.updateStatusOfAll = function(status){
+    var mongo=this;
+mongo.objUrlModel.update({}, {$set: {process_status: status}}, {multi: true}, function(err) { 
+    if(!err)
+        console.log('all updated')
+        });
+}
+
  module.exports=mongoUtil;
