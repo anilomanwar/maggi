@@ -1,3 +1,4 @@
+
  {
      "crawlerMap":{
     "url": "http://www.pepperfry.com/jewellery/linked-bloom-necklace-jl00076-yg00pd.html",
@@ -24,7 +25,7 @@
           "extract":"href"
         },
 		"category":{
-			"selector":".breadcrumb",
+			"selector":"span [itemprop='title']",
 			"extract":"text"
 		},
         "details":{
@@ -36,9 +37,11 @@
  }
  ,
  "sitemap":{
-     "siteMapUrl":"",
-     "levels":2,
-     "type":"xml"
+       "siteMapUrl": "http://www.pepperfry.com/sitemap_index.xml",
+     "levels": 2,
+        "type": "xml",
+		"model":"pepperfry",
+		"level":1
      
  },
  "indexName":"pepperfry_1",

@@ -1,5 +1,5 @@
 var mongoutil=require("./mongoUtil");
-var cawlConfig=require('./scripts/fabfurnish.json')
+var cawlConfig=require('./scripts/pepperfry.json')
 var objsiteMapImpl=require('./sitemapImpl')
 var q=require('q')
 var crawler = function(modelName){
@@ -34,7 +34,10 @@ crawler.prototype.getLinks=function(){
 				
 			})
 	},
-	function(){
+	function(err){
+        if(err)
+            console.log(err)
+            else
 		console.log('doen')
 	}
 	)
@@ -69,6 +72,7 @@ crawler.prototype.start=function(linkArr){
 	var crawlobj=this;
 	var query=cawlConfig.crawlerMap
 	objsiteMapImpl.startCrawling(linkArr,query,'abc').then(function(dataArr){
+     
 	crawlobj.objmongoUtil.insertData(dataArr);
 	deffered.resolve()
 		console.log('done')
@@ -83,7 +87,7 @@ var crawlobj=this;
     crawlobj.objmongoUtil.updateStatusOfAll(0)
 }
 
-var objcrawler = new crawler('fabfurnish')
+var objcrawler = new crawler('pepperfry')
 objcrawler.getLinks();
 //objcrawler.test()
 //crawler.startCrawling(linksArr,query).then(function(){
