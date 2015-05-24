@@ -89,10 +89,10 @@ return deferred.promise;
 }
 
 
-mongoUtil.prototype.findAll=function(iterator,pagesize,callback){
+mongoUtil.prototype.findAll=function(iterator,pagesize,status,callback){
 var mongo = this;
 var deffered= q.defer()
-mongo.objUrlModel.paginate({"process_status":0}, iterator, pagesize, function(error, pageCount, paginatedResults, itemCount) {
+mongo.objUrlModel.paginate({"process_status":status}, iterator, pagesize, function(error, pageCount, paginatedResults, itemCount) {
   if (error) {
     console.error(error);
 	deffered.resolve(paginatedResults)
@@ -107,10 +107,10 @@ console.log(pageCount);
 return deffered.promise;
 }
 
-mongoUtil.prototype.documentCount=function(callback){
+mongoUtil.prototype.documentCount=function(status,callback){
 	var deferred=q.defer();
 	var mongo=this;
-	mongo.objUrlModel.count({"process_status":0},function(err,count){
+	mongo.objUrlModel.count({"process_status":status},function(err,count){
 		deferred.resolve(count)
 		if(callback)
 		callback(count);
@@ -118,13 +118,13 @@ mongoUtil.prototype.documentCount=function(callback){
 	return deferred.promise
 }
 
-mongoUtil.prototype.updateProcessingStatus = function updateProcessingStatus(idArr){
+mongoUtil.prototype.updateProcessingStatus = function updateProcessingStatus(idArr,status){
 var deferred=q.defer();
 var mongo=this;
 //var bulk = mongo.objUrlModel.collection.initializeOrderedBulkOp();
 //    bulk.find({'_id': {$in: idArr}}).update({$set: {process_status: 2}});
 //    bulk.execute(function (error) {
-    mongo.objUrlModel.update({'_id': {$in: idArr}},{$set: {process_status: 2}},{multi:true},function(){
+    mongo.objUrlModel.update({'_id': {$in: idArr}},{$set: {process_status: status}},{multi:true},function(){
         
 	deferred.resolve('updated')
 })

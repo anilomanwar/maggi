@@ -11,7 +11,7 @@ var async = require('async')
 crawler.prototype.getLinks=function(){
 	var crawlobj=this;
 	var deferred=q.defer();
-	crawlobj.objmongoUtil.documentCount().then(function(count){
+	crawlobj.objmongoUtil.documentCount(0).then(function(count){
 	var promiseArr=[];
 	console.log(count)
 	var pages = Array.apply(null, {length: count/100}).map(Number.call, Number)
@@ -19,14 +19,14 @@ crawler.prototype.getLinks=function(){
 	
 	async.eachSeries(pages,function(pageno,callback){
 		console.log('loop count ++++++++++++++++++++++++++++++' + pageno)
-			crawlobj.objmongoUtil.findAll(pageno+1,100).then(function(res){
+			crawlobj.objmongoUtil.findAll(pageno+1,100,0).then(function(res){
 			var linkArr=[];
 			var idArr=[]
 			res.forEach(function(obj){
 				linkArr.push(obj.loc);
 				idArr.push(obj.id)
 			})
-				crawlobj.objmongoUtil.updateProcessingStatus(idArr)
+				crawlobj.objmongoUtil.updateProcessingStatus(idArr,2)
 					crawlobj.start(linkArr).then(function(){
 				
 					callback()
