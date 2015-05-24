@@ -32,7 +32,7 @@
     "porter-stemmer": "^0.9.1",
     "q": "0.8.9",
     "request": "2.42.0",
-    "underscore": "1.4.2",
+    "underscore": "^1.4.2",
     "winston": "0.8.3",
     "winston-elasticsearch": "0.1.1",
     "xml2json": "0.3.2",

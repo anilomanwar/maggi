@@ -89,7 +89,7 @@ return deferred.promise;
 }
 
 
-mongoUtil.prototype.findAll=function(iterator,pagesize,status,callback){
+mongoUtil.prototype.findAllUrl=function(iterator,pagesize,status,callback){
 var mongo = this;
 var deffered= q.defer()
 mongo.objUrlModel.paginate({"process_status":status}, iterator, pagesize, function(error, pageCount, paginatedResults, itemCount) {
@@ -107,10 +107,40 @@ console.log(pageCount);
 return deffered.promise;
 }
 
-mongoUtil.prototype.documentCount=function(status,callback){
+
+mongoUtil.prototype.findAllDocument=function(iterator,pagesize,status,callback){
+var mongo = this;
+var deffered= q.defer()
+mongo.objDataModel.paginate({"process_status":status}, iterator, pagesize, function(error, pageCount, paginatedResults, itemCount) {
+  if (error) {
+    console.error(error);
+	deffered.resolve(paginatedResults)
+  } else {
+console.log('Pages:', iterator);
+console.log(pageCount);
+	deffered.resolve(paginatedResults)
+	if(callback)
+	callback(paginatedResults)
+  }
+});
+return deffered.promise;
+}
+
+mongoUtil.prototype.urlCount=function(status,callback){
 	var deferred=q.defer();
 	var mongo=this;
 	mongo.objUrlModel.count({"process_status":status},function(err,count){
+		deferred.resolve(count)
+		if(callback)
+		callback(count);
+		})
+	return deferred.promise
+}
+
+mongoUtil.prototype.documentCount=function(status,callback){
+	var deferred=q.defer();
+	var mongo=this;
+	mongo.objDataModel.count({"process_status":status},function(err,count){
 		deferred.resolve(count)
 		if(callback)
 		callback(count);
