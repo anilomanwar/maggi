@@ -2,7 +2,10 @@ var elasticsearch = require('elasticsearch'),
 dbUtil=require("./lib/dbUtils");
 var SoCategories=require("./lib/SosCategories"),
 cawlConfig=require('./scripts/pepperfry'),
+logger = require("./lib/w-logger"),
 fs=require("fs");
+var HashMap = require('hashmap').HashMap,
+urlMap=new HashMap();
 var db=  new dbUtil();
 var SCategories=new SoCategories();
 var dumpConfig,client;
@@ -15,6 +18,7 @@ mcid=0;
  
 function dumpIntoDB(cawlConfig)
 {
+ logger.info("Dumping of ESIndex :"+cawlConfig.indexName+" started...");
  dumpConfig=cawlConfig;
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
@@ -50,8 +54,9 @@ client.search({
         
     for(var j=0; j<hits.length; j++) {
              var item=hits[j]._source;
-                item=getCleanedItem(item);
-         if(item.categoryID!=null&&item.title!=null && item.price >0)
+          
+         item=getCleanedItem(item);
+         if(item.categoryID!=null&&item.title!=null && item.price >0 && urlMap.get(item.url)==null)
             {      
             var ls=[];
             ls.push(item.url);
@@ -63,22 +68,21 @@ client.search({
             ls.push(item.details);
             ls.push(dumpConfig.siteName);
             ps.push(ls);
-             fs.appendFile('logs/matchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
-                      if (err) throw err;
-              });
+            urlMap.set(item.url,item.url);
+            logger.info("Qualified Product : URL--> ("+item.url+") with category"+item.category+": mapped to --> "+item.categoryID);
+       
             }
        else
-        fs.appendFile('logs/unmatchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
-                      if (err) throw err;
-              });
+          logger.info("Unqualified Product : URL--> ("+item.url+") will not be inserted into db");
     }// for each hit
     if(ps.length>0)
      db.insertData(ps);
       totalMatchcount+=mcid
        console.log(esi +" matched-> "+mcid +"  total  ->  "+totalMatchcount);
+       logger.info("Batch Starting from -"+esi +" matched-> "+mcid +"  total  ->  "+totalMatchcount);
     getpagedData(esi+inc)
     }, function (err) {
-    console.trace(err.message);
+     logger.error(err.message);
   });
 }// for each 100 products
 
