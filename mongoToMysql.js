@@ -1,71 +1,68 @@
 var elasticsearch = require('elasticsearch'),
 dbUtil=require("./lib/dbUtils");
 var SoCategories=require("./lib/SosCategories"),
+async= require('async'),
 cawlConfig=require('./scripts/pepperfry'),
-_ = require("underscore");
+_ = require("underscore"),
 fs=require("fs");
 var db=  new dbUtil();
-var mongoUtil=require("mongoUtil");
+var mongoUtil=require("./mongoUtil");
 var SCategories=new SoCategories();
 var dumpConfig,client;
 var startpt=0;
-var maxitems=123800,
-totalMatchcount=0,
+var totalMatchcount=0,
 inc=500;
 var indexarr=[],
 mcid=0;
 var statusToPick=0;
- 
+ var objmongoutil;
 function dumpIntoDB(cawlConfig)
 {
  dumpConfig=cawlConfig;
+ objmongoutil = new mongoUtil('54.79.38.84','sos',"pepperfry",cawlConfig.mongoose_schema);
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
- client = new elasticsearch.Client({
-                     host: dumpConfig.ESServer,
-                       log: [{
-                             type: 'stdio',
-                             levels: ['error', 'warning']
-                             }]
-                     });
-inc=dumpConfig.EsDbBatchSize;
-getpagedData(startpt);
+getPagedData(startpt);
 }
 
 function getPagedData(count){
 	/* if(count >= maxitems)
 		return totalMatchcount; */		
 	//get total count of documents	
-	mongoUtil.documentCount(statusToPick).
+	objmongoutil.documentCount(statusToPick).
 	then(function(count){
 		var totalRecords=count;
+		console.log("totalRecords=========="+totalRecords)
 		var pages=Math.ceil(totalRecords/inc);
 		var pageArray=_.range(1,pages);
-		
+		console.log(pageArray);
 		//get data from mongo in async
 		async.eachLimit(pageArray,1,function(page,callback){
 			//Get data from mongo.
-			mongoUtil.findAllDocument(page,inc,statusToPick)
+			objmongoutil.findAllDocument(page,inc,statusToPick)
 			.then(function(rawDataArray){
+		//	 console.log(rawDataArray)
 				//Success function of findAllDocument;
 				var processedRrcords=[];
-					for(var i=0;i<pageArray.length;i++){
+					for(var i=0;i<rawDataArray.length;i++){
 						var rawRecord=getCleanedItem(rawDataArray[i]);
-						if(item.categoryID!=null&&item.title!=null && item.price >0){
+				//	console.log(rawRecord);
+						if(rawRecord.categoryID!=null&&rawRecord.title!=null && rawRecord.price >0){
 							var record=[];				
-							record.push(item.url);
-							record.push(item.categoryID);
-							record.push(item.price);
-							record.push(item.title);
-							record.push(item.image);// && item.image.length>0)?item.image[0]:item.image);
+							record.push(rawRecord.url);
+							record.push(rawRecord.categoryID);
+							record.push(rawRecord.price);
+							record.push(rawRecord.title);
+							record.push(rawRecord.image);// && item.image.length>0)?item.image[0]:item.image);
 							record.push("http://codenlogic.com/project/sos/wp-content/themes/sos/SiteLogos/"+dumpConfig.siteName+"_logo.png");
-							record.push(item.details);
+							record.push(rawRecord.details);
 							record.push(dumpConfig.siteName);			
 							if(record.length>0)
 								processedRrcords.push(record);
 						}				
 					}
-					db.insertData(ps);
+					if(processedRrcords.length>0)
+					 db.insertData(processedRrcords);
 					callback();
 				},function(err){
 				//error function forfindallDocument
@@ -133,11 +130,14 @@ client.search({
 
 function getCleanedItem(item)
 {
+ 
+ if(item!=null && typeof(item.url) != "undefined" && typeof(item.title) != "undefined")
+ {
  // Cleaning for prie
  var price;
- if(item.price)
+ if(item.price!=null)
   price=item.price;
- else if(item.pricex)
+ else if(item.pricex!=null)
   price=item.pricex;
   if(price!=null)
   {
@@ -149,14 +149,14 @@ function getCleanedItem(item)
  item.price=price;
   }
  // Cleaning for Image
- if(Array.isArray(item.image))
+ if(item.image!=null && Array.isArray(item.image))
   {
     item.image=item.image[0];
   }
  
  
   // Cleaning for Image
- if(Array.isArray(item.details))
+ if(item.details!=null && Array.isArray(item.details))
   {
     item.details=item.details.toString();
   }
@@ -191,6 +191,11 @@ function getCleanedItem(item)
 			   mcid++
 		   }
     }
+ }
+ else
+ {
+   console.log("no product");
+ }
  
  return item;
  

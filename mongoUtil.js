@@ -118,6 +118,7 @@ mongo.objDataModel.paginate({"process_status":status}, iterator, pagesize, funct
   } else {
 console.log('Pages:', iterator);
 console.log(pageCount);
+//console.log(paginatedResults)
 	deffered.resolve(paginatedResults)
 	if(callback)
 	callback(paginatedResults)

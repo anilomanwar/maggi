@@ -48,6 +48,6 @@
  "siteName":"pepperfry",
  "ESServer":"http://54.79.38.84:9200/",
  "DBServer":"198.12.73.13",
- "productsTable":"products4",
+ "productsTable":"products5",
  "EsDbBatchSize":500
 }
