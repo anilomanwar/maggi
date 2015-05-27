@@ -131,7 +131,7 @@ client.search({
 function getCleanedItem(item)
 {
  
- if(item!=null && typeof(item.url) != "undefined" && typeof(item.title) != "undefined")
+ if(item!=null )//&& typeof(item.url) != "undefined" && typeof(item.title) != "undefined")
  {
  // Cleaning for prie
  var price;
@@ -191,6 +191,7 @@ function getCleanedItem(item)
 			   mcid++
 		   }
     }
+    console.log("product"+item.url);
  }
  else
  {
