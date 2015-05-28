@@ -47,7 +47,8 @@ function getPagedData(count){
 					for(var i=0;i<rawDataArray.length;i++){
 						var rawRecord=getCleanedItem(rawDataArray[i]);
 				//	console.log(rawRecord);
-						if(rawRecord.categoryID!=null&&rawRecord.title!=null && rawRecord.price >0){
+				if(rawRecord.title!=null)
+						if(rawRecord.categoryID!=null && rawRecord.title!=null && rawRecord.price >0){
 							var record=[];				
 							record.push(rawRecord.url);
 							record.push(rawRecord.categoryID);
@@ -191,7 +192,7 @@ function getCleanedItem(item)
 			   mcid++
 		   }
     }
-    console.log("product"+item.url);
+   console.log("product"+item.url);
  }
  else
  {

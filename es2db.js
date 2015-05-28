@@ -4,11 +4,11 @@ var SoCategories=require("./lib/SosCategories"),
 cawlConfig=require('./scripts/pepperfry'),
 logger = require("./lib/w-logger"),
 fs=require("fs");
-var HashMap = require('hashmap').HashMap,
-urlMap=new HashMap();
+var HashMap = require('hashmap');
+
 var db=  new dbUtil();
 var SCategories=new SoCategories();
-var dumpConfig,client;
+var dumpConfig,client,urlMap;
 var startpt=0;
 var maxitems=123800,
 totalMatchcount=0,
@@ -30,6 +30,7 @@ function dumpIntoDB(cawlConfig)
                              }]
                      });
 inc=dumpConfig.EsDbBatchSize;
+urlMap=new HashMap();
 getpagedData(startpt);
 }
 
@@ -56,7 +57,10 @@ client.search({
              var item=hits[j]._source;
           
          item=getCleanedItem(item);
-         if(item.categoryID!=null&&item.title!=null && item.price >0 && urlMap.get(item.url)==null)
+         if(urlMap.get(item.url)!=null)
+         console.log(item.url);
+         else
+         if(item.categoryID!=null && item.title!=null && item.price >0 )
             {      
             var ls=[];
             ls.push(item.url);
