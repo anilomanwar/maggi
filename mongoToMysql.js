@@ -19,7 +19,7 @@ var statusToPick=0;
 function dumpIntoDB(cawlConfig)
 {
  dumpConfig=cawlConfig;
- objmongoutil = new mongoUtil('54.79.38.84','sos',"pepperfry",cawlConfig.mongoose_schema);
+ objmongoutil = new mongoUtil('localhost','sos',"pepperfry",cawlConfig.mongoose_schema);
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
 getPagedData(startpt);
