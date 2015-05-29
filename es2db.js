@@ -52,14 +52,14 @@ client.search({
      mcid=0;
      if(esi==startpt)
         maxitems=resp.hits.total;
-        
+        console.log("uniqueElements"+urlMap.count());
     for(var j=0; j<hits.length; j++) {
              var item=hits[j]._source;
-          
-         item=getCleanedItem(item);
-         if(urlMap.get(item.url)!=null)
+        if(urlMap.has(item.url.trim().toLowerCase()))
          console.log(item.url);
          else
+         {
+         item=getCleanedItem(item);
          if(item.categoryID!=null && item.title!=null && item.price >0 )
             {      
             var ls=[];
@@ -72,13 +72,14 @@ client.search({
             ls.push(item.details);
             ls.push(dumpConfig.siteName);
             ps.push(ls);
-            urlMap.set(item.url,item.url);
+            urlMap.set(item.url.trim().toLowerCase(),item.url.trim().toLowerCase());
             logger.info("Qualified Product : URL--> ("+item.url+") with category"+item.category+": mapped to --> "+item.categoryID);
        
             }
        else
           logger.info("Unqualified Product : URL--> ("+item.url+") will not be inserted into db");
     }// for each hit
+    }
     if(ps.length>0)
      db.insertData(ps);
       totalMatchcount+=mcid
