@@ -55,8 +55,9 @@ client.search({
         console.log("uniqueElements"+urlMap.count());
     for(var j=0; j<hits.length; j++) {
              var item=hits[j]._source;
-        if(urlMap.has(item.url.trim().toLowerCase()))
-         console.log(item.url);
+       if(item.title!=null)
+        if(urlMap.has(item.title.trim().toLowerCase()))
+         console.log(item.title);
          else
          {
          item=getCleanedItem(item);
@@ -72,7 +73,7 @@ client.search({
             ls.push(item.details);
             ls.push(dumpConfig.siteName);
             ps.push(ls);
-            urlMap.set(item.url.trim().toLowerCase(),item.url.trim().toLowerCase());
+            urlMap.set(item.title.trim().toLowerCase(),item.title.trim().toLowerCase());
             logger.info("Qualified Product : URL--> ("+item.url+") with category"+item.category+": mapped to --> "+item.categoryID);
        
             }
