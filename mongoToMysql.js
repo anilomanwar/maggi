@@ -2,7 +2,8 @@ var elasticsearch = require('elasticsearch'),
 dbUtil=require("./lib/dbUtils");
 var SoCategories=require("./lib/SosCategories"),
 async= require('async'),
-cawlConfig=require('./scripts/pepperfry_mongo'),
+//cawlConfig=require('./scripts/pepperfry_mongo'),
+cawlConfig=require('./scripts/fabfurnish'),
 _ = require("underscore"),
 fs=require("fs");
 var db=  new dbUtil();
@@ -19,7 +20,7 @@ var statusToPick=0;
 function dumpIntoDB(cawlConfig)
 {
  dumpConfig=cawlConfig;
- objmongoutil = new mongoUtil('localhost','sos',"pepperfry",cawlConfig.mongoose_schema);
+ objmongoutil = new mongoUtil('54.66.169.163','sos',"fabfurnish",cawlConfig.mongoose_schema);
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
 getPagedData(startpt);
@@ -45,7 +46,7 @@ function getPagedData(count){
 				//Success function of findAllDocument;
 				var processedRrcords=[];
 					for(var i=0;i<rawDataArray.length;i++){
-						var rawRecord=getCleanedItem(rawDataArray[i]);
+						var rawRecord=getCleanedItem(rawDataArray[i]._doc);
 				//	console.log(rawRecord);
 				if(rawRecord.title!=null)
 						if(rawRecord.categoryID!=null && rawRecord.title!=null && rawRecord.price >0){
@@ -76,58 +77,6 @@ function getPagedData(count){
 	});		
 }
 
-/* function getpagedData(esi){
-if(esi>=maxitems)
-return totalMatchcount;
-client.search({
-  index: dumpConfig.indexName,//"pepperfry1"
-  type: 'test',
-  body: {
-    query: {"match_all":{}},
-            "from" : esi,
-            "size" : inc 
-           }
-      }).then(function (resp) {
-
-    var hits = resp.hits.hits;
-     var ps=[];
-     mcid=0;
-     if(esi==startpt)
-        maxitems=resp.hits.total;
-        
-    for(var j=0; j<hits.length; j++) {
-             var item=hits[j]._source;
-                item=getCleanedItem(item);
-         if(item.categoryID!=null&&item.title!=null && item.price >0)
-            {      
-            var ls=[];
-            ls.push(item.url);
-            ls.push(item.categoryID);
-            ls.push(item.price);
-            ls.push(item.title);
-            ls.push(item.image);// && item.image.length>0)?item.image[0]:item.image);
-            ls.push("http://codenlogic.com/project/sos/wp-content/themes/sos/SiteLogos/"+dumpConfig.siteName+"_logo.png");
-            ls.push(item.details);
-            ls.push(dumpConfig.siteName);
-            ps.push(ls);
-             fs.appendFile('logs/matchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
-                      if (err) throw err;
-              });
-            }
-       else
-        fs.appendFile('logs/unmatchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
-                      if (err) throw err;
-              });
-    }// for each hit
-    if(ps.length>0)
-     db.insertData(ps);
-      totalMatchcount+=mcid
-       console.log(esi +" matched-> "+mcid +"  total  ->  "+totalMatchcount);
-    getpagedData(esi+inc)
-    }, function (err) {
-    console.trace(err.message);
-  });
-} */// for each 100 products
 
 function getCleanedItem(item)
 {
@@ -203,3 +152,74 @@ function getCleanedItem(item)
  
 }
 dumpIntoDB(cawlConfig);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* function getpagedData(esi){
+if(esi>=maxitems)
+return totalMatchcount;
+client.search({
+  index: dumpConfig.indexName,//"pepperfry1"
+  type: 'test',
+  body: {
+    query: {"match_all":{}},
+            "from" : esi,
+            "size" : inc 
+           }
+      }).then(function (resp) {
+
+    var hits = resp.hits.hits;
+     var ps=[];
+     mcid=0;
+     if(esi==startpt)
+        maxitems=resp.hits.total;
+        
+    for(var j=0; j<hits.length; j++) {
+             var item=hits[j]._source;
+                item=getCleanedItem(item);
+         if(item.categoryID!=null&&item.title!=null && item.price >0)
+            {      
+            var ls=[];
+            ls.push(item.url);
+            ls.push(item.categoryID);
+            ls.push(item.price);
+            ls.push(item.title);
+            ls.push(item.image);// && item.image.length>0)?item.image[0]:item.image);
+            ls.push("http://codenlogic.com/project/sos/wp-content/themes/sos/SiteLogos/"+dumpConfig.siteName+"_logo.png");
+            ls.push(item.details);
+            ls.push(dumpConfig.siteName);
+            ps.push(ls);
+             fs.appendFile('logs/matchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
+                      if (err) throw err;
+              });
+            }
+       else
+        fs.appendFile('logs/unmatchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
+                      if (err) throw err;
+              });
+    }// for each hit
+    if(ps.length>0)
+     db.insertData(ps);
+      totalMatchcount+=mcid
+       console.log(esi +" matched-> "+mcid +"  total  ->  "+totalMatchcount);
+    getpagedData(esi+inc)
+    }, function (err) {
+    console.trace(err.message);
+  });
+} */// for each 100 products

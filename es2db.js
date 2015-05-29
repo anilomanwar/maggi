@@ -1,7 +1,7 @@
 var elasticsearch = require('elasticsearch'),
 dbUtil=require("./lib/dbUtils");
 var SoCategories=require("./lib/SosCategories"),
-cawlConfig=require('./scripts/pepperfry'),
+cawlConfig=require('./scripts/fabfurnish'),
 logger = require("./lib/w-logger"),
 fs=require("fs");
 var HashMap = require('hashmap');
