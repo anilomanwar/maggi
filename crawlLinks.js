@@ -74,8 +74,9 @@ crawler.prototype.start=function(linkArr){
 	objsiteMapImpl.startCrawling(linkArr,query,'abc').then(function(dataArr){
      
 	crawlobj.objmongoUtil.insertData(dataArr);
+        console.log('done')
 	deffered.resolve()
-		console.log('done')
+		
     })
 	return deffered.promise;
 }
