@@ -173,4 +173,29 @@ mongo.objUrlModel.update({}, {$set: {process_status: status}}, {multi: true}, fu
         });
 }
 
+mongoUtil.prototype.renameCollection = function renameCollection(oldName, newName){
+	var mongo=this;
+	mongoose.connection.db.renameCollection(oldName,newName, function(err,result){
+		if(!err) (
+            console.log("renamee")
+        )
+		else console.log(err)
+	});
+	 
+}
+
+mongoUtil.prototype.getLastCrawlDate = function (){
+    var deferred=q.defer();
+	var mongo=this;
+    
+    mongo.objDataModel.findOne({}).sort({date: 'desc'}).exec(function(err, docs) { 
+        if(!err){
+            deferred.resolve(docs.created_at)
+        }
+        else
+            deferred.reject(new Error(err))
+    });
+    return deferred.promise;
+}
+
  module.exports=mongoUtil;
