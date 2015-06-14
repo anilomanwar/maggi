@@ -71,11 +71,13 @@ function getPagedData(count){
 						}				
 					}
 					if(processedRrcords.length>0)
+					{
 					console.log("Starting conversion");
 					 db.insertUpdateData(inserUpadateMap)
 					 .then(function(res){
 							callback();
 						});
+					}
 					
 				},function(err){
 					console.log(err);
