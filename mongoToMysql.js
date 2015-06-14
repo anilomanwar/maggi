@@ -13,7 +13,7 @@ var HashMap = require('hashmap');
 var dumpConfig,client;
 var startpt=0;
 var totalMatchcount=0,
-inc=500;
+inc=5;
 var indexarr=[],
 mcid=0;
 var statusToPick=0;
@@ -64,7 +64,7 @@ function getPagedData(count){
 							
 								processedRrcords.push(record);
 							//	uniqueURL.push(rawRecord.url);
-								inserUpadateMap.set(rawRecord.title,record)
+								inserUpadateMap.set(rawRecord.url,record)
 						}				
 					}
 					if(processedRrcords.length>0)
