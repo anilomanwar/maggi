@@ -4,9 +4,12 @@ var mongoutil=require("./mongoUtil");
 var fs=require("fs");
 var async=require("async");
 var cawlConfig=require('./scripts/pepperfry.json')
-
+var mongoToMysql=require('mongoToMysql');
 //initialize mongo util for only 1 model
 var objmongoutil = new mongoutil('localhost','sos',cawlConfig.sitemap.model);
+
+//After inserting crawled data in to mongo db call this function.
+//	mongoToMysql.startConvert(cawlConfig);
 
 var preProcessor=function(callback){
     objmongoutil.getLastCrawlDate().then(function(date){
