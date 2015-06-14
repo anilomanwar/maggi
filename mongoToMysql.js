@@ -71,8 +71,12 @@ function getPagedData(count){
 						}				
 					}
 					if(processedRrcords.length>0)
-					 db.insertUpdateData(inserUpadateMap);
-					callback();
+					console.log("Starting conversion");
+					 db.insertUpdateData(inserUpadateMap)
+					 .then(function(res){
+							callback();
+						});
+					
 				},function(err){
 					console.log(err);
 				//error function forfindallDocument
