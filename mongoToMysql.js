@@ -20,7 +20,7 @@ var statusToPick=0;
 function dumpIntoDB(cawlConfig)
 {
  dumpConfig=cawlConfig;
- objmongoutil = new mongoUtil('54.66.169.163','sos',"fabfurnish",cawlConfig.mongoose_schema);
+ objmongoutil = new mongoUtil('54.153.138.31','sos',"fabfurnish",cawlConfig.mongoose_schema);
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
 getPagedData(startpt);
@@ -36,7 +36,7 @@ function getPagedData(count){
 		console.log("totalRecords=========="+totalRecords)
 		var pages=Math.ceil(totalRecords/inc);
 		var pageArray=_.range(1,pages);
-		console.log(pageArray);
+		//console.log(pageArray);
 		//get data from mongo in async
 		async.eachLimit(pageArray,1,function(page,callback){
 			//Get data from mongo.
@@ -61,7 +61,7 @@ function getPagedData(count){
 							record.push(dumpConfig.siteName);			
 							if(record.length>0)
 								processedRrcords.push(record);
-						}				
+						}
 					}
 					if(processedRrcords.length>0)
 					 db.insertData(processedRrcords);
@@ -141,7 +141,7 @@ function getCleanedItem(item)
 			   mcid++
 		   }
     }
-   console.log("product"+item.url);
+   //console.log("product"+item.url);
  }
  else
  {
