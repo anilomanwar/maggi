@@ -41,6 +41,8 @@
     "DBServer": "198.12.73.13",
     "productsTable": "products4",
     "EsDbBatchSize": 10,
+	"mongoDBServer":"54.153.138.31",
+	"mongoDBName":"sos",
 	"mongoose_schema":{
 		"title":["String"],
 		"price":["String"],
