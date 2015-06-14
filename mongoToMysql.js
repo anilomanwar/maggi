@@ -18,10 +18,13 @@ var indexarr=[],
 mcid=0;
 var statusToPick=0;
  var objmongoutil;
-function dumpIntoDB(cawlConfig)
+function dumpIntoDB(cawlConfig,mongoutil)
 {
  dumpConfig=cawlConfig;
- objmongoutil = new mongoUtil('54.153.138.31','sos',"fabfurnish",cawlConfig.mongoose_schema);
+ if(mongoutil)
+	objmongoutil=mongoutil;
+ else
+	objmongoutil = new mongoUtil(cawlConfig.mongoDBServer,cawlConfig.mongoDBName,cawlConfig.sitemap.model,cawlConfig.mongoose_schema);
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
 getPagedData(startpt);
@@ -37,7 +40,7 @@ function getPagedData(count){
 		console.log("totalRecords=========="+totalRecords)
 		var pages=Math.ceil(totalRecords/inc);
 		var pageArray=_.range(1,pages);
-		console.log(pageArray);
+		//console.log(pageArray);
 		//get data from mongo in async
 		async.eachLimit(pageArray,1,function(page,callback){
 			//Get data from mongo.
@@ -77,6 +80,7 @@ function getPagedData(count){
 		},function(err){
 			//Call back of asyncLimit	
 				console.log(err);
+				console.log("Mongo to mysql completed.")
 		})		
 	},function(err){
 		//Error function of documentCount
@@ -158,4 +162,8 @@ function getCleanedItem(item)
  return item;
  
 }
-dumpIntoDB(cawlConfig);
+var mongoToMySQL={};
+mongoToMySQL.startConvert=dumpIntoDB;
+module.exports = mongoToMySQL;
+
+//dumpIntoDB(cawlConfig);

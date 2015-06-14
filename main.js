@@ -19,8 +19,7 @@ var preProcessor=function(callback){
     },function(error){
         console.log(error)
         callback()
-    })
-    
+    })   
 }
 
 async.series(preProcessor,start(cawlConfig.sitemap),function(err){
