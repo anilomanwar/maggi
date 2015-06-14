@@ -9,6 +9,7 @@ fs=require("fs");
 var db=  new dbUtil();
 var mongoUtil=require("./mongoUtil");
 var SCategories=new SoCategories();
+var HashMap = require('hashmap');
 var dumpConfig,client;
 var startpt=0;
 var totalMatchcount=0,
@@ -20,7 +21,7 @@ var statusToPick=0;
 function dumpIntoDB(cawlConfig)
 {
  dumpConfig=cawlConfig;
- objmongoutil = new mongoUtil('54.66.169.163','sos',"fabfurnish",cawlConfig.mongoose_schema);
+ objmongoutil = new mongoUtil('54.153.138.31','sos',"fabfurnish",cawlConfig.mongoose_schema);
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
 getPagedData(startpt);
@@ -44,7 +45,8 @@ function getPagedData(count){
 			.then(function(rawDataArray){
 		//	 console.log(rawDataArray)
 				//Success function of findAllDocument;
-				var processedRrcords=[];
+				var processedRrcords=[],uniqueURL=[];
+				var inserUpadateMap=new HashMap();
 					for(var i=0;i<rawDataArray.length;i++){
 						var rawRecord=getCleanedItem(rawDataArray[i]._doc);
 				//	console.log(rawRecord);
@@ -60,11 +62,15 @@ function getPagedData(count){
 							record.push(rawRecord.details);
 							record.push(dumpConfig.siteName);			
 							if(record.length>0)
+							{
 								processedRrcords.push(record);
+							//	uniqueURL.push(rawRecord.url);
+								inserUpadateMap.set(rawRecord.title,record)
+							}
 						}				
 					}
 					if(processedRrcords.length>0)
-					 db.insertData(processedRrcords);
+					 db.insertUpdateData(inserUpadateMap);
 					callback();
 				},function(err){
 				//error function forfindallDocument
@@ -141,7 +147,7 @@ function getCleanedItem(item)
 			   mcid++
 		   }
     }
-   console.log("product"+item.url);
+   //console.log("product"+item.url);
  }
  else
  {
@@ -152,74 +158,3 @@ function getCleanedItem(item)
  
 }
 dumpIntoDB(cawlConfig);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* function getpagedData(esi){
-if(esi>=maxitems)
-return totalMatchcount;
-client.search({
-  index: dumpConfig.indexName,//"pepperfry1"
-  type: 'test',
-  body: {
-    query: {"match_all":{}},
-            "from" : esi,
-            "size" : inc 
-           }
-      }).then(function (resp) {
-
-    var hits = resp.hits.hits;
-     var ps=[];
-     mcid=0;
-     if(esi==startpt)
-        maxitems=resp.hits.total;
-        
-    for(var j=0; j<hits.length; j++) {
-             var item=hits[j]._source;
-                item=getCleanedItem(item);
-         if(item.categoryID!=null&&item.title!=null && item.price >0)
-            {      
-            var ls=[];
-            ls.push(item.url);
-            ls.push(item.categoryID);
-            ls.push(item.price);
-            ls.push(item.title);
-            ls.push(item.image);// && item.image.length>0)?item.image[0]:item.image);
-            ls.push("http://codenlogic.com/project/sos/wp-content/themes/sos/SiteLogos/"+dumpConfig.siteName+"_logo.png");
-            ls.push(item.details);
-            ls.push(dumpConfig.siteName);
-            ps.push(ls);
-             fs.appendFile('logs/matchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
-                      if (err) throw err;
-              });
-            }
-       else
-        fs.appendFile('logs/unmatchedCategories_'+dumpConfig.siteName+'.txt',item.category+": mapped to --> "+item.categoryID+"  URL--> ("+item.url+')\n', function (err) {
-                      if (err) throw err;
-              });
-    }// for each hit
-    if(ps.length>0)
-     db.insertData(ps);
-      totalMatchcount+=mcid
-       console.log(esi +" matched-> "+mcid +"  total  ->  "+totalMatchcount);
-    getpagedData(esi+inc)
-    }, function (err) {
-    console.trace(err.message);
-  });
-} */// for each 100 products

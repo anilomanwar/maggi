@@ -78,7 +78,7 @@ client.search({
        
             }
        else
-          logger.info("Unqualified Product : URL--> ("+item.url+") will not be inserted into db");
+          logger.info("Disqualified Product : URL--> ("+item.url+") will not be inserted into db");
     }// for each hit
     }
     if(ps.length>0)
