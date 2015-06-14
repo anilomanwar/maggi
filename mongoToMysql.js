@@ -61,25 +61,26 @@ function getPagedData(count){
 							record.push("http://codenlogic.com/project/sos/wp-content/themes/sos/SiteLogos/"+dumpConfig.siteName+"_logo.png");
 							record.push(rawRecord.details);
 							record.push(dumpConfig.siteName);			
-							if(record.length>0)
-							{
+							
 								processedRrcords.push(record);
 							//	uniqueURL.push(rawRecord.url);
 								inserUpadateMap.set(rawRecord.title,record)
-							}
 						}				
 					}
 					if(processedRrcords.length>0)
 					 db.insertUpdateData(inserUpadateMap);
 					callback();
 				},function(err){
+					console.log(err);
 				//error function forfindallDocument
 			});				
 		},function(err){
-			//Call back of asyncLimit			
+			//Call back of asyncLimit	
+				console.log(err);
 		})		
 	},function(err){
 		//Error function of documentCount
+			console.log(err);
 	});		
 }
 
