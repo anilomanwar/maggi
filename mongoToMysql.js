@@ -2,7 +2,6 @@ var elasticsearch = require('elasticsearch'),
 dbUtil=require("./lib/dbUtils");
 var SoCategories=require("./lib/SosCategories"),
 async= require('async'),
-//cawlConfig=require('./scripts/pepperfry_mongo'),
 cawlConfig=require('./scripts/fabfurnish'),
 _ = require("underscore"),
 fs=require("fs");
@@ -28,6 +27,7 @@ function dumpIntoDB(cawlConfig,mongoutil)
  SCategories.getCategoriesMap();
  db.initDB(dumpConfig);
 getPagedData(startpt);
+inc=dumpConfig.EsDbBatchSize;
 }
 
 function getPagedData(count){
@@ -78,6 +78,8 @@ function getPagedData(count){
 							callback();
 						});
 					}
+					else
+					callback();
 					
 				},function(err){
 					console.log(err);
@@ -172,4 +174,4 @@ var mongoToMySQL={};
 mongoToMySQL.startConvert=dumpIntoDB;
 module.exports = mongoToMySQL;
 
-//dumpIntoDB(cawlConfig);
+dumpIntoDB(cawlConfig);

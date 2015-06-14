@@ -40,8 +40,8 @@
     "ESServer": "http://52.74.178.178:9200/",
     "DBServer": "198.12.73.13",
     "productsTable": "products4",
-    "EsDbBatchSize": 10,
-	"mongoDBServer":"54.153.138.31",
+    "EsDbBatchSize": 100,
+	"mongoDBServer":"54.79.49.110",
 	"mongoDBName":"sos",
 	"mongoose_schema":{
 		"title":["String"],
