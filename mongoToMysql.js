@@ -73,7 +73,8 @@ function getPagedData(count){
 					if(processedRrcords.length>0)
 					{
 					console.log("Starting conversion");
-					 db.insertUpdateData(inserUpadateMap)
+					// db.insertUpdateData(inserUpadateMap)
+					db.insertData(processedRrcords)
 					 .then(function(res){
 							callback();
 						});
